@@ -1,0 +1,47 @@
+<html>
+	<body>
+		<input name="digit1" type="text" inputmode="numeric" autocomplete="one-time-code">
+		<input name="digit2" type="text" inputmode="numeric">
+		<input name="digit3" type="text" inputmode="numeric">
+		<input name="digit4" type="text" inputmode="numeric">
+
+		<script>
+			// Android
+			if ('OTPCredential' in window) {
+			  console.log('OTPCredential OK !');
+			  
+			  window.addEventListener('DOMContentLoaded', e => {
+			    navigator.credentials.get({
+			      otp: { transport:['sms'] }
+			    }).then(otp => {
+			      const codeOTP = otp.code;
+			      console.log('Code OTP reçu : ' + codeOTP);
+
+			      //document.querySelector('input[autocomplete="one-time-code"]').value = codeOTP;
+			      document.querySelector('input[name="digit1"]').value = codeOTP.substring(0,1);
+			      document.querySelector('input[name="digit2"]').value = codeOTP.substring(1,2);
+			      document.querySelector('input[name="digit3"]').value = codeOTP.substring(2,3);
+			      document.querySelector('input[name="digit4"]').value = codeOTP.substring(3,4);
+			    }).catch(err => {
+			      console.log(err);
+			    });
+			  });
+			}
+
+			// IOS
+			document.querySelector('input[name="digit1"]').addEventListener('paste', (event) => {
+			    const codeOTP = (event.clipboardData || window.clipboardData).getData('text');
+    			console.log('Code OTP collé : ' + codeOTP);
+
+    			if (codeOTP.length = 4) {
+	    			document.querySelector('input[name="digit1"]').value = codeOTP.substring(0,1);
+				    document.querySelector('input[name="digit2"]').value = codeOTP.substring(1,2);
+				    document.querySelector('input[name="digit3"]').value = codeOTP.substring(2,3);
+				    document.querySelector('input[name="digit4"]').value = codeOTP.substring(3,4);
+
+				    event.preventDefault();
+				}
+			});
+		</script>
+	</body>
+</html>
